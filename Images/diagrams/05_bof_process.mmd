@@ -1,0 +1,51 @@
+---
+title: Processo BOF — Entradas, Reações e Saídas Monitoradas
+---
+flowchart LR
+
+    subgraph INPUTS["ENTRADAS"]
+        direction TB
+        I1["🔥 Ferro-Gusa Líquido\n─────────────────\n1450–1500 °C\n4–4,5 % C\n0,4–1,5 % Si\n0,1–0,4 % Mn\n0,05–0,15 % P"]
+        I2["♻️ Sucata\n─────────────────\n10–30 % da carga\ncontrole térmico"]
+        I3["🟤 Fundentes\n─────────────────\nCaO (cal calcítica)\nMgO (dolomita)\nbasicidade ≈ 3"]
+        I4["💨 Oxigênio\n─────────────────\npureza ≥ 99,5 %\n300–800 Nm³/min\nlança: 1,2–2,5 m"]
+    end
+
+    subgraph BOF["CONVERSOR BOF"]
+        direction TB
+        R1["Sopro de O₂\n(12–22 min)"]
+        R2["Reações de Oxidação\n──────────────────────────\nC + ½O₂ → CO   ΔH = −110,5 kJ/mol\nSi + O₂ → SiO₂  ΔH = −877,8 kJ/mol\nMn + ½O₂ → MnO  ΔH = −384,7 kJ/mol\n2P + 5/2O₂ → P₂O₅ ΔH = −1492 kJ/mol"]
+        R3["Balanço Entálpico\n──────────────────────────\n~65% calor sensível do gusa\n~35% calor das oxidações\nfusão da sucata"]
+        R4["Formação de Escória\nCaO·SiO₂ — remoção P, S"]
+        R1 --> R2 --> R3
+        R2 --> R4
+    end
+
+    subgraph OUTPUTS["SAÍDAS — ALVOS DE PREDIÇÃO"]
+        direction TB
+        O1["🌡️ T_final\n1620–1700 °C\nMAE ≤ 10 °C"]
+        O2["⚗️ C_final\n0,02–0,10 % em massa\nMAE ≤ 0,020 % em massa"]
+        O3["🧪 P_final\n0,005–0,025 % em massa\nMAE ≤ 0,003 % em massa"]
+        O4["🫧 Gases de Exaustão\nCO / CO₂\n(off-gas)"]
+    end
+
+    subgraph SENSORS["SENSORES → ATRIBUTOS FÍSICO-DERIVADOS"]
+        direction TB
+        F1["Termopares\nMedidores de fluxo\nEspectrômetros"]
+        F2["8 Features PIML\n────────────────────\nDemanda teórica O₂\nEficiência O₂\nExcedente entálpico\nMassa oxidada\nTaxa descarburação\nBasicidade escória\nCapacidade fusão sucata\nPerda Fe"]
+        F1 --> F2
+    end
+
+    INPUTS --> BOF
+    BOF --> OUTPUTS
+    BOF --> SENSORS
+    SENSORS --> ML["Modelo PIML\n(Config C)"]
+    OUTPUTS -.->|"alvos de\ntreinamento"| ML
+
+    style INPUTS  fill:#fff7ed,stroke:#fb923c,color:#431407
+    style BOF     fill:#fef2f2,stroke:#ef4444,color:#450a0a
+    style OUTPUTS fill:#f0fdf4,stroke:#22c55e,color:#052e16
+    style SENSORS fill:#eff6ff,stroke:#3b82f6,color:#1e3a5f
+    style ML      fill:#fce7f3,stroke:#db2777,color:#500724,stroke-width:2px
+    style R2      fill:#fecaca,stroke:#dc2626
+    style F2      fill:#bfdbfe,stroke:#2563eb

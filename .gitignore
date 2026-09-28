@@ -1,0 +1,47 @@
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.lsb
+*.lsg
+*.lsg.tmp
+*.loquadro
+*.out
+*.pdf
+*.synctex.gz
+*.toc
+
+# Exceptions — keep these PDFs tracked
+!modelo_dissertacao-exemplo.pdf
+!aprovacao.pdf
+# Compiled dissertation (so reviewers can read it without a LaTeX install)
+!modelo_dissertacao.pdf
+# Figures included by the chapters (\includegraphics of Images/results/*.pdf, Images/shap/*.pdf)
+!Images/**/*.pdf
+
+# VSCode (machine-specific)
+.vscode/
+
+# Zone.Identifier artifacts (Windows metadata)
+*:Zone.Identifier
+
+# Reference PDFs (covered by *.pdf rule above)
+# See references/ folder — 67 papers downloaded
+
+
+# Helper scripts output
+__pycache__/
+
+# Trained models (regenerable via scripts/, up to ~50 MB each)
+models/*.joblib
+catboost_info/
+
+# Training logs (regenerable)
+logs/
+

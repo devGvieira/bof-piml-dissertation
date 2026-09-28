@@ -1,0 +1,34 @@
+---
+title: Topologias de Modelos Híbridos Físico-Informados
+---
+flowchart LR
+
+    subgraph SERIAL["(A) Serial — Correção de Resíduos"]
+        direction LR
+        SA_IN["Entradas\nx"] --> SA_PHY["Modelo\nFísico\nŷ_phys"]
+        SA_IN --> SA_ML["Modelo ML\n(resíduos)"]
+        SA_PHY --> SA_SUM["⊕\nŷ = ŷ_phys\n+ ε_ML"]
+        SA_ML --> SA_SUM --> SA_OUT["Saída\nŷ"]
+    end
+
+    subgraph PARALLEL["(B) Paralela — Fusão de Saídas"]
+        direction LR
+        PB_IN["Entradas\nx"] --> PB_PHY["Modelo\nFísico"]
+        PB_IN --> PB_ML["Modelo\nML"]
+        PB_PHY --> PB_FUSE["Fusão\nα·ŷ_phys\n+(1-α)·ŷ_ML"]
+        PB_ML --> PB_FUSE --> PB_OUT["Saída\nŷ"]
+    end
+
+    subgraph FEATINF["(C) Informada por Atributos  ★"]
+        direction LR
+        PC_IN["Entradas\nbrutas x"] --> PC_PHY["Balanços\nfísicos\n(fixos)"]
+        PC_PHY --> PC_FEAT["φ(x)\n8 atributos\nfísico-\nderivados"]
+        PC_IN --> PC_CAT["Concat\n[x ; φ(x)]"]
+        PC_FEAT --> PC_CAT --> PC_ML["Qualquer\nalg. ML"] --> PC_OUT["Saída\nŷ"]
+    end
+
+    style SERIAL   fill:#eff6ff,stroke:#3b82f6,color:#1e3a5f
+    style PARALLEL fill:#fefce8,stroke:#ca8a04,color:#713f12
+    style FEATINF  fill:#f0fdf4,stroke:#16a34a,color:#14532d
+    style PC_FEAT  fill:#bbf7d0,stroke:#15803d,stroke-width:2px
+    style PC_ML    fill:#bbf7d0,stroke:#15803d,stroke-width:2px

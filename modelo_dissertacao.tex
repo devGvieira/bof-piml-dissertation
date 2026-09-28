@@ -1,0 +1,278 @@
+%% Exemplo de utilizacao do estilo de formatacao normas-utf-tex (http://normas-utf-tex.sourceforge.net)
+%% dúvidas acessar o site acima
+%%
+%%
+%% Autores: (200?-2011) Hugo Vieira Neto (hvieir@utfpr.edu.br)
+%%          (200?-2011) Diogo Rosa Kuiaski (diogo.kuiaski@gmail.com)
+%%          (2011-2017) Marcos Talau <talau@users.sourceforge.net>
+%% Colaborador:
+%%          (2011) César M. Vargas Benitez <cesarvargasb@gmail.com>
+
+%%
+%% IMPORTANTE: O texto está escrito com acentuação antiga, atualmente você
+%%             pode escrever acentos sem precisar de códigos para tal.
+%%
+
+\documentclass[openright]{normas-utf-tex} %openright = o capitulo comeca sempre em paginas impares
+%\documentclass[oneside]{normas-utf-tex} %oneside = para dissertacoes com numero de paginas menor que 100 (apenas frente da folha) 
+
+% force A4 paper format
+\special{papersize=210mm,297mm}
+
+\usepackage[breaklinks=true,hidelinks]{hyperref}
+\usepackage[alf,abnt-emphasize=bf,bibjustif,recuo=0cm, abnt-etal-cite=2, abnt-etal-list=0]{abntcite} %configuracao correta das referencias bibliograficas.
+
+\usepackage[brazil]{babel} % pacote portugues brasileiro
+\usepackage[utf8]{inputenc} % pacote para acentuacao direta
+\usepackage{amsmath,amsfonts,amssymb} % pacote matematico
+\usepackage{graphicx} % pacote grafico
+%\usepackage{times} % fonte times
+\usepackage[final]{pdfpages} % adicao da ata
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{tikz}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+%Podem utilizar GEOMETRY{...} para realizar pequenos ajustes das margens. Onde, left=esquerda, right=direita, top=superior, bottom=inferior. P.ex.:
+%\geometry{left=3.0cm,right=1.5cm,top=4cm,bottom=1cm} 
+
+% ---------- Preambulo ----------
+%\instituicao{Universidade Tecnológica Federal do Paraná} % nome da instituicao
+\instituicao{Universidade Tecnológica Federal do Paraná\\Departamento Acadêmico de Computação} % nome da instituicao
+\programa{Programa de Pós-Graduação em Informática} % nome do programa
+%\area{Engenharia de Software} % [Engenharia Biom\'edica] ou [Inform\'atica Industrial] ou [Telem\'atica]
+
+\documento{Dissertação} % [Disserta\c{c}\~ao] ou [Tese]
+\nivel{Mestrado} % [Mestrado] ou [Doutorado]
+\titulacao{Mestre} % [Mestre] ou [Doutor]
+
+\titulo{{Engenharia de Atributos Físico-Informados para Predição de Ponto Final em Fornos Básicos a Oxigênio}} % titulo do trabalho em portugues
+\title{Physics-Informed Feature Engineering for Endpoint Prediction in Basic Oxygen Furnaces} % titulo do trabalho em ingles
+
+\autor{Gabriel Vinicius Silva Vieira de Souza} % autor do trabalho
+\cita{SOUZA, Gabriel Vinicius Silva Vieira de} % sobrenome (maiusculas), nome do autor do trabalho
+
+\palavraschave{Aprendizado de Máquina Informado por Física (PIML), 	Otimização de Processos Industriais, Engenharia de Atributos Físico-Químicos} % palavras-chave do trabalho
+\keywords{Physics-Informed Machine Learning (PIML), Industrial Process Optimization, Physico-Chemical Feature Engineering} % palavras-chave do trabalho em ingles
+
+\comentario{\UTFPRdocumentodata\ apresentada ao \UTFPRprogramadata\ da \ABNTinstituicaodata\ -- UTFPR, como requisito parcial para obtenção do título de \UTFPRtitulacaodata\ em Informática.}
+
+\orientador[Orientador:]{Prof. Dr. Silvio Ricardo Rodrigues Sanches} % nome do orientador do trabalho
+%\orientador[Orientadora:]{Prof$^{a}.$ Dr$^{a}$. Nome Orientadora} % nome do orientador do trabalho
+%\orientador[Orientadora:]{Nome da Orientadora} % <- no caso de orientadora, usar esta sintaxe
+%\coorientador{Nome do Co-orientador} % nome do co-orientador do trabalho, caso exista
+%\coorientador[Co-orientadora:]{Nome da Co-orientadora} % <- no caso de co-orientadora, usar esta sintaxe
+%\coorientador[Co-orientadores:]{Nome do Co-orientador} % no caso de 2 co-orientadores, usar esta sintaxe
+%\coorientadorb{Nome do Co-orientador 2}	% este comando inclui o nome do 2o co-orientador
+
+
+\local{Cornélio Procópio} % cidade
+\data{\the\year} % ano automatico
+
+
+% desativa hifenizacao mantendo o texto justificado.
+% thanks to Emilio C. G. Wille
+\tolerance=1
+\emergencystretch=\maxdimen
+\hyphenpenalty=10000
+\hbadness=10000
+\sloppy
+
+%---------- Inicio do Documento ----------
+\begin{document}
+
+%\capa % geracao automatica da capa
+\capa
+
+
+%\folhaderosto % geracao automatica da folha de rosto
+\folhaderosto
+
+
+% insercao da folha de aprovação
+
+%%%%%%%%%%%%%%% para usuários de pdftex %%%%%%%%%%%%%%%%%%%%%
+
+\includepdf[pages=1, pagecommand={}, trim=0 2cm 0 2cm, clip]{aprovacao.pdf}
+% O comando acima inclui a folha de aprovação ocultando o cabeçalho e o rodapé gerado pelo sistema acadêmico, 
+% para inserir o documento com essas informações, use "\includepdf{aprovacao.pdf}"
+
+%%%%%%%%%%%%%%%  para usuários latex: converter o pdf em eps utilizando ferramentas como o GIMP ou inkskape
+%\newpage
+%\pagestyle{empty}
+%\thispagestyle{empty}
+%\tikz[remember picture,overlay]
+%\node[opacity=1,inner sep=0pt] at (current page.center)
+%{\includegraphics[width=\paperwidth,height=\paperheight]{aprovacao}};
+%\cleardoublepage
+
+
+% dedicatoria
+\begin{dedicatoria}
+À minha família, por nutrir a curiosidade que me trouxe da Física à Inteligência Artificial. Ao meu orientador e colegas, pelas conversas que transformaram ideias em código. E aos profissionais da indústria, cuja rotina inspira este esforço por processos mais sustentáveis.
+\end{dedicatoria}
+
+% agradecimentos
+\begin{agradecimentos}
+Ao Prof.\ Dr.\ Silvio Ricardo Rodrigues Sanches, pela orientação dedicada, pelas revisões detalhadas e pela confiança depositada nesta pesquisa interdisciplinar.
+
+Aos membros da banca examinadora, pelas contribuições que enriqueceram a versão final deste trabalho.
+
+À Universidade Tecnológica Federal do Paraná (UTFPR), câmpus Cornélio Procópio, e ao Programa de Pós-Graduação em Informática (PPGI), pela infraestrutura e pelo ambiente acadêmico propício à pesquisa.
+
+À minha família, pelo apoio incondicional durante toda a trajetória do mestrado.
+
+O presente trabalho foi realizado sem financiamento externo. Todas as ferramentas computacionais utilizadas são de código aberto ou de acesso gratuito para fins acadêmicos.
+\end{agradecimentos}
+
+% epigrafe (opcional)
+% \begin{epigrafe}
+% Texto da ep\'igrafe.
+% \end{epigrafe}
+
+%resumo
+\begin{resumo}
+Esta dissertação investiga se a incorporação de conhecimento físico-químico na engenharia de atributos --- em vez de restringi-lo às funções de perda ou às arquiteturas de rede --- melhora a predição de parâmetros de fim de corrida em Fornos Básicos a Oxigênio (BOF). Oito atributos físico-derivados, calculados a partir de balanços estequiométricos e termodinâmicos, são integrados como features de entrada a onze algoritmos de regressão supervisionada (Ridge, Lasso, ElasticNet, RF, GBM, XGBoost, LightGBM, CatBoost, SVR, KNN, MLP). Um protocolo experimental em três configurações --- A (atributos brutos), B (MLP profundo) e C (atributos brutos + físico-derivados) --- isola o efeito da engenharia de atributos do efeito de capacidade arquitetural, sobre 10.000 corridas sintéticas validadas por consistência entálpica. Os resultados demonstram que os atributos físico-derivados produzem ganhos estatisticamente significativos (Wilcoxon, $p < 0{,}05$) para o teor de carbono final (10/11 modelos melhoram; melhor MAE = 0{,}0086\,\%, CatBoost) e para o teor de fósforo final (8/11 modelos melhoram; melhor MAE = 0{,}0029\,\%, CatBoost, com seis modelos atendendo ao limiar industrial contra apenas um na linha de base), mas não resolvem o gargalo estrutural da temperatura final, limitada por variância irredutível de grandezas estocásticas não observáveis. A análise SHAP é consistente com --- sem provar --- a coerência física dos modelos: \texttt{o2\_efficiency} é o atributo de maior importância para carbono e \texttt{slag\_basicity} para fósforo, com quatro das cinco hipóteses de coerência física pré-registradas não falsificadas. A hipótese central é parcialmente confirmada: a engenharia de atributos físico-derivados melhora a predição nos alvos com relação física direta com as features propostas, mas o benefício depende do alvo e da família de modelo utilizada.
+\end{resumo}
+
+%abstract
+\begin{abstract}
+This dissertation investigates whether embedding physico-chemical knowledge into feature engineering --- rather than constraining loss functions or network architectures --- improves endpoint prediction in Basic Oxygen Furnace (BOF) steelmaking. Eight physics-derived features, computed from stoichiometric and thermodynamic balances, are integrated as input features into eleven supervised regression algorithms (Ridge, Lasso, ElasticNet, RF, GBM, XGBoost, LightGBM, CatBoost, SVR, KNN, MLP). A three-configuration experimental protocol --- A~(raw features), B~(deep MLP), and C~(raw + physics-derived features) --- isolates the effect of feature engineering from architectural capacity, evaluated on 10,000 synthetic heats validated by enthalpy balance consistency. Results show that physics-derived features yield statistically significant improvements (Wilcoxon, $p < 0.05$) for final carbon content (10/11 models improve; best MAE~=~0.0086\%, CatBoost) and final phosphorus content (8/11 models improve; best MAE~=~0.0029\%, CatBoost, with six models meeting the industrial threshold against only one in the baseline), but do not resolve the structural bottleneck of final temperature prediction, which is limited by irreducible variance from unobservable stochastic process variables. SHAP analysis is consistent with --- though does not prove --- physical coherence: \texttt{o2\_efficiency} is the top feature for carbon and \texttt{slag\_basicity} for phosphorus, with four of five pre-registered physical-coherence hypotheses not falsified. The central hypothesis is partially confirmed: physics-derived feature engineering improves prediction for targets with direct physical relationships to the proposed features, but the benefit depends on target variable and model family.
+\end{abstract}
+
+% listas (opcionais, mas recomenda-se a partir de 5 elementos)
+\listadefiguras % geracao automatica da lista de figuras
+\listadetabelas % geracao automatica da lista de tabelas
+%\listadequadros % nenhum quadro definido nesta dissertação
+\listadesiglas % geracao automatica da lista de siglas
+\listadesimbolos % geracao automatica da lista de simbolos
+
+% sumario
+\sumario % geracao automatica do sumario
+
+
+%---------- Inicio do Texto ----------
+% recomenda-se a escrita de cada capitulo em um arquivo texto separado (exemplo: intro.tex, fund.tex, exper.tex, concl.tex, etc.) e a posterior inclusao dos mesmos no mestre do documento utilizando o comando \input{}, da seguinte forma:
+%\input{intro.tex}
+%\input{fund.tex}
+%\input{exper.tex}
+%\input{concl.tex}
+
+\setstretch{1.5}
+\setcounter{page}{12}
+
+
+\include{./Capitulos/capitulo1}
+\include{./Capitulos/capitulo2}
+\include{./Capitulos/capitulo3}
+\include{./Capitulos/capitulo4}
+\include{./Capitulos/capitulo5}
+\include{./Capitulos/capitulo6}
+
+%---------- Referencias ----------
+\clearpage % this is need for add +1 to pageref of bibstart used in 'ficha catalografica'.
+\label{bibstart}
+\bibliography{bibtex/reflatex} % geracao automatica das referencias a partir do arquivo reflatex.bib
+\label{bibend}
+
+%---------- Apendices (opcionais) ----------
+%\apendice
+%\chapter{Nome do Ap\^endice}
+
+%Use o comando {\ttfamily \textbackslash apendice} e depois comandos {\ttfamily \textbackslash chapter\{\}}
+%para gerar t\'itulos de ap\^en-dices.
+
+
+% ---------- Anexos (opcionais) ----------
+%\anexo
+%\chapter{Nome do Anexo}
+
+%Use o comando {\ttfamily \textbackslash anexo} e depois comandos {\ttfamily \textbackslash chapter\{\}}
+%para gerar t\'itulos de anexos.
+
+
+% --------- Ordenacao Afabetica da Lista de siglas --------
+%\textbf{* Observa\c{c}\~oes:} a ordenacao alfabetica da lista de siglas ainda nao eh realizada de forma automatica, porem
+% eh possivel se de realizar isto manualmente. Duas formas:
+%
+% ** Primeira forma)
+%    A ordenacao eh feita com o auxilio do comando 'sort', disponivel em qualquer
+% sistema Linux e UNIX, e tambem em sistemas Windows se instalado o coreutils (http://gnuwin32.sourceforge.net/packages/coreutils.htm)
+% comandos para compilar e ordenar, supondo que seu arquivo se chame 'dissertacao.tex':
+%
+%      $ latex dissertacao
+%      $ bibtex dissertacao && latex dissertacao
+%      $ latex dissertacao
+%      $ sort dissertacao.lsg > dissertacao.lsg.tmp
+%      $ mv dissertacao.lsg.tmp dissertacao.lsg
+%      $ latex dissertacao
+%      $ dvipdf dissertacao.dvi
+%
+%
+% ** Segunda forma)
+%\textbf{Sugest\~ao:} crie outro arquivo .tex para siglas e utilize o comando \sigla{sigla}{descri\c{c}\~ao}.
+%Para incluir este arquivo no final do arquivo, utilize o comando \input{arquivo.tex}.
+%Assim, Todas as siglas serao geradas na ultima pagina. Entao, devera excluir a ultima pagina da versao final do arquivo
+% PDF do seu documento.
+
+
+%-------- Citacoes ---------
+% - Utilize o comando \citeonline{...} para citacoes com o seguinte formato: Autor et al. (2011).
+% Este tipo de formato eh utilizado no comeco do paragrafo. P.ex.: \citeonline{autor2011}
+
+% - Utilize o comando \cite{...} para citacoeses no meio ou final do paragrafo. P.ex.: \cite{autor2011}
+
+
+
+%-------- Titulos com nomes cientificos (titulo, capitulos e secoes) ----------
+% Regra para escrita de nomes cientificos:
+% Os nomes devem ser escritos em italico, 
+%a primeira letra do primeiro nome deve ser em maiusculo e o restante em minusculo (inclusive a primeira letra do segundo nome).
+% VEJA os exemplos abaixo.
+% 
+% 1) voce nao quer que a secao fique com uppercase (caixa alta) automaticamente:
+%\section[nouppercase]{\MakeUppercase{Estudo dos efeitos da radiacao ultravioleta C e TFD em celulas de} {\textit{Saccharomyces boulardii}}
+%
+% 2) por padrao os cases (maiusculas/minuscula) sao ajustados automaticamente, voce nao precisa usar makeuppercase e afins.
+% \section{Introducao} % a introducao sera posta no texto como INTRODUCAO, automaticamente, como a norma indica.
+
+
+\contracapa
+
+%---------- Registro de Siglas e Simbolos (pagina descartada na versao final) ----------
+\newpage
+\pagestyle{empty}
+\noindent\textbf{Siglas:}\par
+\sigla{AutoML}{Automated Machine Learning}
+\sigla{BOF}{Basic Oxygen Furnace}
+\sigla{DRI}{Direct Reduced Iron}
+\sigla{EAF}{Electric Arc Furnace}
+\sigla{GBM}{Gradient Boosting Machine}
+\sigla{HBI}{Hot Briquetted Iron}
+\sigla{KNN}{K-Nearest Neighbors}
+\sigla{LGBM}{Light Gradient Boosting Machine}
+\sigla{MAE}{Mean Absolute Error}
+\sigla{ML}{Machine Learning}
+\sigla{MLP}{Multilayer Perceptron}
+\sigla{ODE}{Ordinary Differential Equation}
+\sigla{PIML}{Physics-Informed Machine Learning}
+\sigla{PINN}{Physics-Informed Neural Network}
+\sigla{RF}{Random Forest}
+\sigla{RMSE}{Root Mean Squared Error}
+\sigla{SHAP}{SHapley Additive exPlanations}
+\sigla{SVR}{Support Vector Regression}
+\sigla{TPE}{Tree-structured Parzen Estimator}
+\sigla{XGB}{Extreme Gradient Boosting}\par
+\noindent\textbf{Simbolos:}\par
+\simbolo{$T_\text{final}$}{Temperatura final do aco (graus C)}
+\simbolo{$C_\text{final}$}{Teor de carbono final (\%~em~massa)}
+\simbolo{$P_\text{final}$}{Teor de fosforo final (\%~em~massa)}
+\simbolo{$Q_\text{in}$}{Calor de entrada no conversor (kJ)}
+\simbolo{$Q_\text{out}$}{Calor de saida do conversor (kJ)}
+\simbolo{$m_\text{hm}$}{Massa de ferro-gusa (t)}
+\simbolo{$T_\text{hm}$}{Temperatura do ferro-gusa (graus C)}
+\simbolo{$t_\text{blow}$}{Tempo de sopro de oxigenio (min)}
+
+\end{document}
+

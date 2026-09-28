@@ -1,0 +1,55 @@
+---
+title: Configurações Experimentais A, B e C — Isolamento de Efeitos
+---
+flowchart TD
+
+    DS["Dataset Sintético BOF\n5 000 corridas válidas\nsplit 70% treino · 15% val · 15% teste"]
+
+    subgraph CONFIG_A["CONFIG A  —  Linha de Base"]
+        direction TB
+        A_FEAT["Atributos Brutos apenas\n(11 variáveis de entrada)"]
+        A_MOD["11 Modelos via AutoML\nRidge · Lasso · ElasticNet\nRF · GBM · XGBoost\nLightGBM · CatBoost\nSVR · KNN · MLP"]
+        A_TUNE["Optuna — 100 trials\nTuning por MAE-val"]
+        A_FEAT --> A_MOD --> A_TUNE
+    end
+
+    subgraph CONFIG_B["CONFIG B  —  Profundidade Arquitetural"]
+        direction TB
+        B_FEAT["Atributos Brutos apenas\n(11 variáveis de entrada)"]
+        B_MOD["MLP profunda\ncamadas: {1,2,3,4}\nunidades: {32,64,128,256,512}\ndropout ∈ [0, 0.5]"]
+        B_TUNE["Optuna — 100 trials\nAdam + Early Stopping"]
+        B_FEAT --> B_MOD --> B_TUNE
+    end
+
+    subgraph CONFIG_C["CONFIG C  —  Físico-Informada  ★"]
+        direction TB
+        C_FEAT["Brutos (11) + Físico-Derivados (8)\n= 19 variáveis totais"]
+        C_MOD["11 Modelos AutoML + MLP\n(mesmo conjunto da Config A + B)"]
+        C_TUNE["Optuna — 100 trials\nTuning por MAE-val"]
+        C_FEAT --> C_MOD --> C_TUNE
+    end
+
+    DS --> CONFIG_A
+    DS --> CONFIG_B
+    DS --> CONFIG_C
+
+    CONFIG_A --> EVAL
+    CONFIG_B --> EVAL
+    CONFIG_C --> EVAL
+
+    subgraph EVAL["Avaliação nos Dados de Teste"]
+        direction LR
+        E1["MAE · RMSE · R²\n3 alvos: T · C · P"]
+        E2["within_tolerance\nT: ≤10°C\nC: ≤0,020%em massa\nP: ≤0,003%em massa"]
+        E3["Extrapolação\n±20% fora do range"]
+        E4["SHAP\n(melhor modelo por família)"]
+    end
+
+    EVAL --> COMP["Comparação A×B×C\n─────────────────────────────\nA×C → efeito dos atributos físicos\nA×B → efeito da profundidade\nB×C → interação física + profundidade"]
+
+    style CONFIG_A fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
+    style CONFIG_B fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    style CONFIG_C fill:#dcfce7,stroke:#16a34a,color:#14532d
+    style EVAL     fill:#f3f4f6,stroke:#6b7280
+    style COMP     fill:#fce7f3,stroke:#db2777,color:#831843
+    style C_FEAT   fill:#bbf7d0,stroke:#15803d,stroke-width:2px

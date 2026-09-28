@@ -1,0 +1,22 @@
+============================================================
+SHAP Physical Coherence Hypothesis Tests
+============================================================
+
+H1: [PASS]
+  theo_o2_demand or o2_efficiency in top-3 for T_final. Top-3: ['t_blow', 'o2_efficiency', 'decarb_rate']
+
+H2: [PASS]
+  theo_o2_demand or o2_efficiency in top-3 for C_final. Top-3: ['o2_efficiency', 'O2_flow', 'fe_oxidation_loss']
+
+H3: [PASS]
+  slag_basicity in top-3 for P_final. Top-3: ['slag_basicity', 'P_hm', 'theo_o2_demand']
+
+H4: [PASS]
+  decarb_rate mean signed SHAP for C_final = -0.000114 (hypothesis: negative)
+
+H5: [FAIL]
+  enthalpy_surplus mean signed SHAP for T_final = -1.453227 (hypothesis: positive)
+
+============================================================
+WARNING: one or more hypotheses FAILED — check for spurious correlations.
+============================================================

@@ -1,0 +1,40 @@
+---
+title: Geração de Dados Sintéticos — Loop Monte Carlo com Validação Física
+---
+flowchart LR
+    START(["Início\nseed=42"])
+
+    S1["Amostrar uniformemente\nnos intervalos operacionais\n─────────────────────────\nm_hm · T_hm · C_hm · Si_hm\nMn_hm · P_hm · f_scrap\nCaO · Q_O2 · t_blow · h_lance"]
+
+    S2["Calcular Q_in\n──────────\nCalor sensível\n+ oxidações\nC·Si·Mn·P"]
+
+    S3["Calcular\nT_final · C_final\nP_final"]
+
+    S4["Calcular Q_out\n──────────\nm_steel·Cp·ΔT\n+ 5%·Q_in"]
+
+    V{"Balanço Entálpico\n|Q_in − Q_out|\n/ Q_in < 10%?"}
+
+    S5["Adicionar ruído\n─────────────\nσ_T = 5 °C\nσ_C = 0,003 %\nσ_P = 0,001 %"]
+
+    S6["Calcular 8\natributos\nfísico-derivados"]
+
+    COUNT{"N = 5 000\nválidas?"}
+
+    END(["Dataset\n5 000 × 19"])
+
+    START --> S1 --> S2 --> S3 --> S4 --> V
+    V -- "❌ Descarta" --> S1
+    V -- "✅ Aceita" --> S5 --> S6 --> COUNT
+    COUNT -- "Não" --> S1
+    COUNT -- "Sim" --> END
+
+    style START fill:#1e40af,color:#fff,stroke:#1e40af
+    style END   fill:#15803d,color:#fff,stroke:#15803d
+    style V     fill:#fbbf24,stroke:#d97706,color:#1c1917
+    style COUNT fill:#fbbf24,stroke:#d97706,color:#1c1917
+    style S1    fill:#eff6ff,stroke:#93c5fd
+    style S2    fill:#eff6ff,stroke:#93c5fd
+    style S3    fill:#eff6ff,stroke:#93c5fd
+    style S4    fill:#eff6ff,stroke:#93c5fd
+    style S5    fill:#f0fdf4,stroke:#86efac
+    style S6    fill:#f0fdf4,stroke:#86efac

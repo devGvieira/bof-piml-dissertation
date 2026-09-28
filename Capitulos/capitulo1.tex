@@ -1,0 +1,72 @@
+\chapter{Introdução}
+\label{chp:capitulo1}
+
+Este trabalho apresenta um arcabouço reprodutível que utiliza modelagem físico-química para aprimorar as previsões de aprendizado de máquina em contextos industriais, investigando se atributos derivados de balanços físicos — em vez de restrições na função de perda — melhoram a predição de parâmetros de fim de corrida em Fornos Básicos a Oxigênio (BOF). A metodologia se configura como um passo rumo a sistemas de IA mais interpretáveis e fisicamente coerentes para o setor de manufatura, condicionado às limitações discutidas no Capítulo~\ref{chp:con}.
+
+%-- PROBLEMATIZAÇÃO	 --%
+\section{Contexto Histórico}
+\label{sec:contexto-historico}
+
+Manufatura e analítica de dados coevoluíram ao longo de quatro revoluções industriais — da mecanização a vapor que impulsionou a produção em massa no final do século XVIII, passando pelas linhas de montagem eletrificadas do início do século XX \cite{lasi2014industry} e pela automação assistida por computador da Indústria 3.0 \cite{hermann2016industrie4}, até a integração atual de IoT, análises avançadas e IA em operações auto-otimizáveis \cite{schwab2017fourth,lu2017industry}. O aprendizado de máquina acompanhou essa trajetória: algoritmos interpretáveis (regressão linear, árvores de decisão) lançaram as bases da modelagem preditiva \cite{kuhn2013applied}, sucedidos por perceptrons multicamada e redes profundas especializadas em visão e sequências \cite{jordan2015ml}.
+
+A fronteira mais recente incorpora leis físicas ao aprendizado por dois caminhos distintos: as Redes Neurais Informadas por Física (PINNs), que embutem restrições físicas diretamente na função de perda \cite{raissi2019pinns,cuomo2022physics}, e a síntese de atributos específicos de domínio, que insere grandezas físicas como variáveis de entrada sem alterar o objetivo de treinamento \cite{willard2020integrating,brunton2020machine}. Este trabalho segue o segundo caminho — uma distinção que orienta toda a proposta metodológica dos capítulos seguintes.
+
+%-- MOTIVAÇÃO --%
+\section{Problemas e premissas}
+\label{sub:prob}
+
+Modelos de aprendizado de máquina puramente orientados a dados atingem desempenho competitivo em muitas tarefas de regressão industrial, mas frequentemente falham ao extrapolar para regiões operacionais fora da distribuição de treino --- um problema recorrente em processos siderúrgicos com dados escassos e ruidosos\,\cite{bae2020bof,willard2020integrating}. O paradigma de Aprendizado de Máquina Informado por Física (PIML) propõe integrar conhecimento de domínio às estruturas de ML para mitigar essa limitação\,\cite{raissi2019pinns,karniadakis2021physics,cuomo2022physics}. Três topologias de integração são reconhecidas na literatura: serial (modelo físico + corretor ML), paralela (fusão de saídas) e informada por atributos (grandezas físicas como features de entrada)\,\cite{willard2020integrating,chattopadhyay2022hybrid}. As três topologias já foram aplicadas a BOF individualmente\,\cite{xia2024dmpinn,chattopadhyay2022hybrid,shao2024hybrid,bae2020bof}, mas nenhum trabalho isola sistematicamente, sob um protocolo controlado, o efeito da topologia informada por atributos frente à mesma capacidade arquitetural sem esses atributos --- a lacuna real detalhada no Capítulo~\ref{chp:capitulo3}, não a novidade da topologia em si.
+
+No contexto específico de Fornos Básicos a Oxigênio (BOF), a predição acurada dos parâmetros de fim de corrida --- temperatura final ($T_\text{final}$), teor de carbono ($[\text{C}]_\text{final}$) e teor de fósforo ($[\text{P}]_\text{final}$) --- é determinante para a qualidade do aço --- definida neste trabalho pelas tolerâncias industriais detalhadas na Seção~\ref{sec:objetivo} --- e para a eficiência energética do processo\,\cite{bae2020bof,zhou2024bof}. O setor siderúrgico responde por aproximadamente 7--8\,\% das emissões globais de gases de efeito estufa\,\cite{worldsteel2025climate}; melhorias na predição de \textit{endpoint} podem reduzir o re-sopro e o desperdício de materiais, com impacto direto em sustentabilidade\,\cite{chattopadhyay2022hybrid}. Um estudo recente demonstra que a adição de features termodinâmicas a modelos de ML melhora a taxa de acerto em 2--4 pontos percentuais\,\cite{bae2020bof}, mas nenhum trabalho isolou sistematicamente o efeito da engenharia de atributos da capacidade arquitetural em um protocolo controlado.
+
+Diante dessa lacuna, a \textbf{pergunta de pesquisa} desta dissertação é: \textit{a incorporação de atributos físico-derivados baseados em balanços estequiométricos e termodinâmicos como features de entrada melhora significativamente a predição de parâmetros de fim de corrida em BOF, em comparação com modelos treinados exclusivamente com variáveis brutas?}
+
+\section{Objetivos}
+\label{sec:objetivo}
+
+O objetivo geral desta pesquisa é quantificar o ganho de precisão atribuível à engenharia de atributos baseada em balanços estequiométricos e termodinâmicos para predição de \textit{endpoint} em conversores BOF, no contexto de \textbf{regressão supervisionada} informada por física (PIML)\,\cite{willard2020integrating,cuomo2022physics}. Para tanto, propõe-se um protocolo experimental com três configurações — Config~A (atributos brutos, conjunto completo de modelos), Config~B (atributos brutos, MLP profunda com busca de arquitetura) e Config~C (atributos brutos mais os oito físico-derivados, conjunto completo de modelos) — que isola o efeito dos atributos físico-derivados (A$\times$C) do efeito da capacidade arquitetural (A$\times$B), avaliando 11 modelos de ML comuns às três configurações --- 12 na Config~C, que soma o MLP profundo exclusivo de B e C --- sobre três variáveis-alvo. Trata-se de uma \textbf{contribuição metodológica} validada sobre dados sintéticos gerados dentro de faixas físico-químicas documentadas na literatura; não constitui estudo de implantação operacional, e a validação com dados reais de planta permanece como trabalho futuro necessário\,\cite{buggineni2024synthetic}.
+
+Os três alvos de predição são: temperatura final do banho ($T_\text{final}$), teor de carbono residual ($[\text{C}]_\text{final}$) e teor de fósforo residual ($[\text{P}]_\text{final}$). Os critérios de qualidade industrial adotados são MAE $\leq 10\,^\circ\text{C}$, MAE $\leq 0{,}020\,\%$ em massa e MAE $\leq 0{,}003\,\%$ em massa, respectivamente\,\cite{zhou2024bof,bae2020bof}. Os dados são gerados sinteticamente via Monte Carlo dentro de limites físico-químicos documentados na literatura, com plausibilidade termodinâmica validada por balanço entálpico.
+
+\subsection{Objetivos Específicos}
+\label{subsec:objetivos-especificos}
+
+\begin{enumerate}
+  \item Gerar um conjunto de dados sintético de processo BOF por amostragem de Monte Carlo dentro de faixas físico-químicas validadas pela literatura, com validação de cada instância por balanço entálpico\,\cite{buggineni2024synthetic,xia2024dmpinn};
+  \item Calcular oito atributos físico-derivados — demanda teórica de O$_2$, eficiência de O$_2$, excedente entálpico, massa total oxidada, taxa de descarburação, basicidade da escória, capacidade de fusão de sucata e perda de Fe por oxidação — a partir de equações estequiométricas e termodinâmicas do processo\,\cite{chattopadhyay2022hybrid,shao2024hybrid};
+  \item Treinar e otimizar o conjunto completo de modelos de regressão supervisionada — Ridge\,\cite{hoerl1970ridge}, Lasso\,\cite{tibshirani1996regression}, ElasticNet\,\cite{zou2005regularization}, Random Forest, Gradient Boosting, XGBoost, LightGBM, CatBoost\,\cite{zhou2024bof}, SVR\,\cite{widodo2007svm}, KNN\,\cite{ding2011knnimpute} e MLP\,\cite{goodfellow2016deep} — em três configurações experimentais comparáveis (A, B e C);
+  \item Quantificar a diferença de desempenho (MAE, RMSE, R$^2$) entre as configurações via análise comparativa, verificando se a Config~C (físico-informada) atinge os limiares industriais de qualidade nos três alvos (MAE $\leq 10$\,°C, $\leq 0{,}020$\,\%~em~massa e $\leq 0{,}003$\,\%~em~massa, respectivamente)\,\cite{zhou2024bof,bae2020bof};
+  \item Interpretar os modelos de melhor desempenho por análise SHAP\,\cite{lundberg2017unified,manojlovic2022eaf}, testando as seguintes hipóteses verificáveis de coerência física:
+  \begin{description}
+    \item[H1:] um atributo derivado da demanda estequiométrica de O$_2$ (\texttt{theo\_o2\_demand} ou sua forma normalizada \texttt{o2\_efficiency}) figura entre os três atributos de maior importância SHAP para $T_\text{final}$ na Config~C;
+    \item[H2:] um atributo derivado da demanda estequiométrica de O$_2$ (\texttt{theo\_o2\_demand} ou \texttt{o2\_efficiency}) figura entre os três atributos de maior importância SHAP para $[\text{C}]_\text{final}$ na Config~C;
+    \item[H3:] \texttt{slag\_basicity} figura entre os três atributos de maior importância SHAP para $[\text{P}]_\text{final}$ na Config~C;
+    \item[H4:] o efeito marginal SHAP de \texttt{decarb\_rate} sobre $[\text{C}]_\text{final}$ é predominantemente negativo (maior taxa de descarburação prediz menor teor de carbono final);
+    \item[H5:] o efeito marginal SHAP de \texttt{enthalpy\_surplus} sobre $T_\text{final}$ é predominantemente positivo (maior disponibilidade entálpica prediz maior temperatura final).
+  \end{description}
+  A rejeição de uma hipótese isolada é examinada quanto a explicações estruturais alternativas (por exemplo, redundância entre atributos correlatos); a rejeição da maioria das cinco, sem explicação estrutural defensável, constituiria evidência de que o modelo capturou correlações espúrias em vez de estrutura causal física.
+\end{enumerate}
+
+\section{Justificativa}
+\label{sec:just}
+
+O BOF é responsável por cerca de 70\,\% da produção mundial de aço bruto\,\cite{worldsteel2025figures}, e o setor siderúrgico como um todo responde por aproximadamente 7–8\% das emissões globais de gases de efeito estufa (Seção~\ref{sub:prob})\,\cite{worldsteel2025climate}. Melhorias na predição de \textit{endpoint} têm potencial para reduzir re-sopros e desperdício de material, com benefícios de rendimento e consumo energético a serem quantificados em trabalho futuro sobre dados reais de planta — esta dissertação estabelece a metodologia e quantifica seu ganho sobre dados sintéticos, não uma implantação operacional.
+
+Dessa forma, as contribuições desta dissertação são três:
+
+\begin{enumerate}
+  \item \textbf{Desenho do \textit{framework}} – Uma arquitetura que sistematiza oito atributos físico-derivados do processo BOF e os combina com um conjunto de onze modelos de regressão supervisionada (doze na Config~C, incluindo o MLP profundo) otimizados via Optuna, agnóstica ao algoritmo de aprendizado;
+  \item \textbf{Protocolo de avaliação controlado} – Um protocolo A$\times$B$\times$C que isola o efeito da engenharia de atributos físicos do efeito da capacidade arquitetural, sobre um conjunto de dados sintéticos gerados dentro de faixas físico-químicas documentadas na literatura e validados por consistência termodinâmica;
+  \item \textbf{Evidência empírica target-dependente} – Um exame de em quais dos três alvos (T\textsubscript{final}, C\textsubscript{final}, P\textsubscript{final}) e para quais famílias de modelo a engenharia de atributos físico-derivados produz ganho estatisticamente significativo, incluindo os casos em que o ganho é nulo ou negativo\,\cite{willard2020integrating}.
+\end{enumerate}
+
+Ao quantificar onde e para quem a engenharia de atributos físicos ajuda — e onde não ajuda —, este trabalho contribui para a agenda de uma IA fisicamente fundamentada em domínios industriais, com a otimização energética/ambiental como motivação e aplicação prospectiva, não como resultado demonstrado nesta dissertação.
+
+\section{Estrutura}
+\label{sec:estrutura}
+
+O restante do texto segue a lógica dos cinco objetivos específicos (§\,\ref{subsec:objetivos-especificos}). O Capítulo~2 estabelece a fundamentação teórica: pré-processamento e avaliação de modelos de ML, o paradigma PIML e a formulação de PINNs, a caracterização físico-química do BOF, e abordagens de geração de dados sintéticos, interpretabilidade via SHAP e arquiteturas híbridas — dando suporte conceitual a todos os cinco objetivos. O Capítulo~3, por sua vez, revisa os trabalhos relacionados em cinco eixos temáticos (fundamentos de PIML, endpoint em BOF, EAF, dados sintéticos e arquiteturas híbridas físico-informadas) e fecha com uma tabela comparativa que fundamenta o posicionamento desta contribuição frente à literatura.
+
+Os Capítulos~4 e~5 entregam os cinco objetivos diretamente. O Capítulo~4 detalha o protocolo de geração sintética por Monte Carlo, as equações dos oito atributos físico-derivados, a defesa contra circularidade e as três configurações experimentais com o protocolo de \textit{tuning} via Optuna (Objetivos~1--4; Figura~\ref{fig:piml-pipeline}). O Capítulo~5 verifica a hipótese central por análise comparativa entre configurações e testes de Wilcoxon, avalia a robustez em extrapolação e discute a coerência física das importâncias SHAP frente às hipóteses H1--H5 (Objetivo~5), confrontando os resultados com magnitudes da literatura.
+
+Por fim, o Capítulo~6 sintetiza o trabalho e suas contribuições, identifica as limitações inerentes ao uso de dados sintéticos e propõe direcionamentos para validação com dados reais de planta industrial.

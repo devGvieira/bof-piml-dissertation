@@ -1,0 +1,53 @@
+---
+title: Framework SHAP — Interpretabilidade e Validação Física
+---
+flowchart LR
+
+    subgraph TRAIN["Modelos — Config C"]
+        direction TB
+        M1["Random Forest"]
+        M2["XGBoost"]
+        M3["MLP"]
+    end
+
+    SHAP_CALC["Cálculo SHAP\n─────────────\nContribuição\nmarginal por\ninstância"]
+
+    subgraph TARGETS["Por Alvo"]
+        direction TB
+        T1["T_final"]
+        T2["C_final"]
+        T3["P_final"]
+    end
+
+    subgraph ANALYSIS["Análise"]
+        direction TB
+        A1["Ranking Global\n(|SHAP| médio)"]
+        A2["Beeswarm Plot"]
+        A3["Dependence Plot"]
+    end
+
+    subgraph VALIDATION["Validação Física"]
+        direction TB
+        V1["theo_o2_demand\n→ T_final e C_final?\n✓ governa decarb."]
+        V2["slag_basicity\n→ P_final?\n✓ basicidade ↑ P"]
+        V3["decarb_rate\n→ C_final inv.?\n✓ taxa alta→ ↓C"]
+        V4["enthalpy_surplus\n→ T_final?\n✓ excedente ↑T"]
+    end
+
+    RESULT{"SHAP ≈\nconhecimento\nmetalúrgico?"}
+
+    OK["✅ Validação\nO modelo aprendeu\nfísica real"]
+    NOK["⚠️ Investigar\ncorrelações\nespúrias"]
+
+    TRAIN --> SHAP_CALC --> TARGETS --> ANALYSIS --> VALIDATION --> RESULT
+    RESULT -- "Sim" --> OK
+    RESULT -- "Não" --> NOK
+
+    style TRAIN      fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
+    style SHAP_CALC  fill:#f3f4f6,stroke:#6b7280
+    style TARGETS    fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    style ANALYSIS   fill:#eff6ff,stroke:#60a5fa
+    style VALIDATION fill:#f0fdf4,stroke:#16a34a,color:#14532d
+    style RESULT     fill:#fbbf24,stroke:#d97706,color:#1c1917
+    style OK         fill:#bbf7d0,stroke:#15803d,color:#052e16,stroke-width:2px
+    style NOK        fill:#fecaca,stroke:#dc2626,color:#450a0a

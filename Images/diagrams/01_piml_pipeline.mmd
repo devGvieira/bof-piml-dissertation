@@ -1,0 +1,45 @@
+---
+title: Pipeline PIML — Visão Geral da Metodologia
+---
+flowchart LR
+    A1["🔩 Entradas\n─────────\nGusa · Sucata\nCaO · O₂\nTempo sopro\nAltura lança"]
+
+    subgraph ETAPA1["ETAPA 1 — Dados Sintéticos"]
+        direction TB
+        B1["Monte Carlo\nN = 5 000\nseed = 42"]
+        B2{"Validação\nEntálpica\n< 10%"}
+        B3["T_final · C_final\nP_final\n+ ruído gaussiano"]
+        B1 --> B2
+        B2 -- "❌" --> B1
+        B2 -- "✅" --> B3
+    end
+
+    subgraph ETAPA2["ETAPA 2 — Engenharia de Atributos"]
+        direction TB
+        C1["11 Atributos\nBrutos"]
+        C2["8 Atributos\nFísico-Derivados\n─────────────\nDemanda O₂\nEficiência O₂\nExcedente H\nMassa oxidada\nTaxa decarb.\nBasicidade\nFusão sucata\nPerda Fe"]
+        C1 --- C2
+    end
+
+    subgraph ETAPA3["ETAPA 3 — Treinamento"]
+        direction TB
+        D1["Config A\nBrutos\n11 modelos\nAutoML"]
+        D2["Config B\nBrutos\nMLP profunda\nOptuna"]
+        D3["Config C ★\nBrutos + Físicos\n11 mod. + MLP\nAutoML+Optuna"]
+    end
+
+    subgraph ETAPA4["ETAPA 4 — Avaliação"]
+        direction TB
+        E1["MAE · RMSE\nR² · tolerance"]
+        E2["SHAP\nValidação física"]
+        E3["Comparação\nA × B × C"]
+        E1 --> E2 --> E3
+    end
+
+    A1 --> ETAPA1 --> ETAPA2 --> ETAPA3 --> ETAPA4
+
+    style ETAPA1 fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
+    style ETAPA2 fill:#dcfce7,stroke:#16a34a,color:#14532d
+    style ETAPA3 fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    style ETAPA4 fill:#fce7f3,stroke:#db2777,color:#831843
+    style D3 fill:#fde68a,stroke:#d97706,stroke-width:2px
